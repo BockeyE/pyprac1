@@ -7,5 +7,6 @@ from polls.models import Question
 class QuestionAdmin(admin.ModelAdmin):
     fields = ['pub_date', 'question_text']
 
-#registe for model
+
+# register for model
 admin.site.register(Question, QuestionAdmin)
