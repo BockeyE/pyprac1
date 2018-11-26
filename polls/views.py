@@ -41,6 +41,10 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
+def elect(request):
+    return ''
+
+
 class IndexView(generic.ListView):
     template_name = 'polls/index.html';
     context_object_name = 'latest_question_list';
