@@ -12,17 +12,19 @@ if __name__ == "__main__":
     print("server running")
     while True:
         print("getting connection")
+        # 在这个accept 阻塞
         clientSocket, addressInfo = serverSocket.accept()
         print("get connected")
         receivedData = str(clientSocket.recv(2048))
         # print(receivedData)
+        print(receivedData)
         entities = receivedData.split("\\r\\n")
-        Sec_WebSocket_Key = entities[11].split(":")[1].strip() + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+        Sec_WebSocket_Key = entities[12].split(":")[1].strip() + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
         print("key ", Sec_WebSocket_Key)
         response_key = base64.b64encode(hashlib.sha1(bytes(Sec_WebSocket_Key, encoding="utf8")).digest())
         response_key_str = str(response_key)
         response_key_str = response_key_str[2:30]
-        # print(response_key_str)
+        print(response_key_str)
         response_key_entity = "Sec-WebSocket-Accept: " + response_key_str + "\r\n"
         clientSocket.send(bytes("HTTP/1.1 101 Web Socket Protocol Handshake\r\n", encoding="utf8"))
         clientSocket.send(bytes("Upgrade: websocket\r\n", encoding="utf8"))
@@ -32,6 +34,7 @@ if __name__ == "__main__":
 
 
 def parse_data(self, data):
+    print('data: ' + str(data))
     v = data[1] & 0x7f
     if v == 0x7e:
         p = 4
