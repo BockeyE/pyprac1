@@ -28,7 +28,9 @@
 
     function connect() {
         var host = "ws://" + $("serverIP").value + ":" + $("serverPort").value + "/"
+
         socket = new WebSocket(host);
+   
         try {
 
             socket.onopen = function (msg) {
