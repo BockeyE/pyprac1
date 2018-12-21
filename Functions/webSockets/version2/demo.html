@@ -16,7 +16,6 @@
         };
         ws.onmessage = function (message) {
             console.log('receive message : ' + message.data);
-            displayContent(msg.data);
         };
         ws.onerror = function (error) {
             console.log('error :' + error.name + error.number);
@@ -31,9 +30,7 @@
         console.log("sending a message");
         ws.send("websocket from js");
     }
-      function displayContent(msg) {
-        $("content").value += "\r\n" + new Date().Format("yyyy/MM/dd hh:mm:ss") + ":  " + msg;
-    }
+
 </script>
 
 <button onclick="startWS()">createWebsocket</button>
@@ -43,7 +40,7 @@
 
 </p>
 <div>
-    <input type="text" id="content" >
+    <input type="text" id="content">
 </div>
 </body>
 </html>
