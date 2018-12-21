@@ -27,8 +27,12 @@ class websocket_thread(threading.Thread):
         headers = self.parse_headers(data)
 
         print(data)
-        token = self.generate_token(
-            headers['Sec-WebSocket-Key'])
+        # token = self.generate_token(
+        #     headers['Sec-WebSocket-Key'])
+
+        entities = str(data).split("\\r\\n")
+        token = entities[12].split(":")[1].strip() + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+
         self.connection.send(('\
             HTTP/1.1 101 WebSocket Protocol Hybi-10\r\n\
             Upgrade: WebSocket\r\n\
@@ -38,7 +42,7 @@ class websocket_thread(threading.Thread):
         while True:
             try:
                 data = self.connection.recv(1024)
-                print('data' + str(data))
+                print('orig data: ' + str(data))
             except socket.error:
                 print("unexpected error: ")
                 clients.pop(self.username)

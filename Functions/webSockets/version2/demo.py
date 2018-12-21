@@ -23,9 +23,9 @@ class tem(object):
         clientSocket.send(bytes("Connection: Upgrade\r\n\r\n", encoding="utf8"))
         print("send the hand shake data")
 
-    def parse_data(self, data):
-
-        v = (ord(data[1])) & 0x7f
+    def parse_data(self, msg):
+        print('parse target: ' + msg)
+        v = (ord(msg[1])) & 0x7f
         # v = data & 0x7f
         if v == 0x7e:
             p = 4
@@ -33,18 +33,12 @@ class tem(object):
             p = 10
         else:
             p = 2
-        mask = data[p: p + 4]
-        data = data[p + 4:]
-        # print(data)
-        # i = 0
-        # raw_str = ""
-        # for d in data:
-        #     raw_str += chr(ord(d) ^ ord(mask[i % 4]))
-        #     i += 1
-        # return (raw_str)
-        return ''.join([chr(ord(v) ^ ord(mask[k % 4])) for k, v in enumerate(data)])
-
-
+        mask = msg[p: p + 4]
+        data = msg[p + 4:]
+        print(type(msg))
+        print('mask: ' + mask)
+        print('data: ' + data)
+        return ''.join([chr(ord(n) ^ ord(mask[k % 4])) for k, n in enumerate(data)])
 
     # 发送websocket server报文部分
     def sendMessage(self, clientSocket, message):
@@ -64,16 +58,9 @@ class tem(object):
             print("the message is too long to send in a time")
             return
         message_byte = bytes()
-        print(type(backMsgList[0]))
         for c in backMsgList:
-            # if type(c) != bytes:
-            # print(bytes(c, encoding="utf8"))
             message_byte += c
         message_byte += bytes(message, encoding="utf8")
-        # print("message_str : ", str(message_byte))
-        # print("message_byte : ", bytes(message_str, encoding="utf8"))
-        # print(message_str[0], message_str[4:])
-        # self.connection.send(bytes("0x810x010x63", encoding="utf8"))
         clientSocket.send(message_byte)
 
 
@@ -96,6 +83,6 @@ if __name__ == "__main__":
     tem.send_vali(clientSocket=clientSocket, receivedData=receivedData)
     while True:
         receivedData = str(clientSocket.recv(2048))
-        text = tem.parse_data(data=receivedData)
+        text = tem.parse_data(msg=receivedData)
         print("parse data: " + text)
         tem.sendMessage(clientSocket=clientSocket, message=text)
