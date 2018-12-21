@@ -27,8 +27,9 @@
     }
 
     function sendMessage() {
-        console.log("sending a message");
-        ws.send("websocket from js");
+        var ms = 'websocket from js';
+        console.log("sending a message  is :" + ms);
+        ws.send(ms);
     }
 
 </script>
