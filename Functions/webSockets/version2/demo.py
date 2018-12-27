@@ -1,7 +1,9 @@
+import json
 import socket
 import hashlib
 import base64
 import struct
+import urllib
 
 
 class tem(object):
@@ -23,22 +25,76 @@ class tem(object):
         clientSocket.send(bytes("Connection: Upgrade\r\n\r\n", encoding="utf8"))
         print("send the hand shake data")
 
-    def parse_data(self, msg):
-        print('parse target: ' + msg)
-        v = (ord(msg[1])) & 0x7f
-        # v = data & 0x7f
-        if v == 0x7e:
-            p = 4
-        elif v == 0x7f:
-            p = 10
+    # def parse_data(self, msg):
+    #
+    #     print('msg-1: ' + msg[1])
+    #     print(msg.encode('utf-8'))
+    #     print('parse target: ' + msg)
+    #     v = (ord(msg[1])) & 0x7f
+    #     print("v : " + str(v))
+    #     # v = data & 0x7f
+    #     if v == 0x7e:
+    #         p = 4
+    #     elif v == 0x7f:
+    #         p = 10
+    #     else:
+    #         p = 2
+    #     mask = msg[p: p + 4]
+    #     data = msg[p + 4:]
+    #     print(type(msg))
+    #     print('mask: ' + mask)
+    #     print('data: ' + data)
+    #     # str1 = ''.join([chr(ord(n) ^ ord(mask[i % 4])) for i, n in enumerate(data)])
+    #     str_re = ''
+    #     for i, d in enumerate(data):
+    #         print('d: ' + d)
+    #         print('mask : ' + mask[i % 4])
+    #         print('ord d: ' + chr(ord(d)))
+    #         print(str(i) + ' |position: ' + chr(ord(d) ^ ord(mask[i % 4])))
+    #         str_re = str_re + chr(ord(d) ^ ord(mask[i % 4]))
+    #     return str_re
+    def message_decode(self, data):
+        HEADER, = struct.unpack("!H", data[:2])
+        data = data[2:]
+
+        FIN = (HEADER >> 15) & 0x01
+        RSV1 = (HEADER >> 14) & 0x01
+        RSV2 = (HEADER >> 13) & 0x01
+        RSV3 = (HEADER >> 12) & 0x01
+        OPCODE = (HEADER >> 8) & 0x0F
+        MASKED = (HEADER >> 7) & 0x01
+        LEN = (HEADER >> 0) & 0x7F
+
+        if OPCODE == 8:
+            return (False, False)
+
+        if LEN == 126:
+            LEN, = struct.unpack("!H", data[:2])
+            data = data[2:]
+        elif LEN == 127:
+            LEN, = struct.unpack("!4H", data[:8])
+            data = data[8:]
+
+        if MASKED:
+            MASK = struct.unpack("4B", data[:4])
+            data = data[4:]
         else:
-            p = 2
-        mask = msg[p: p + 4]
-        data = msg[p + 4:]
-        print(type(msg))
-        print('mask: ' + mask)
-        print('data: ' + data)
-        return ''.join([chr(ord(n) ^ ord(mask[k % 4])) for k, n in enumerate(data)])
+            return (False, False)
+
+        payload = ""
+        for i, c in enumerate(data):
+            payload += chr(c ^ MASK[i % 4])
+
+        payload = urllib.parse.unquote(payload)
+        try:
+            _data = json.loads(payload)
+
+            if _data.get("where", -1) == -1 or _data.get("data", -1) == -1:
+                raise Exception  # empty area detected, raise exception
+        except:
+            _data = {"where": "null", "data": {}}
+
+        return (_data["where"], _data["data"])
 
     # 发送websocket server报文部分
     def sendMessage(self, clientSocket, message):
@@ -77,12 +133,21 @@ if __name__ == "__main__":
     clientSocket, addressInfo = serverSocket.accept()
 
     print("get connected")
-    receivedData = str(clientSocket.recv(2048))
-    # print(receivedData)
+
+    org_rece = clientSocket.recv(2048)
+    receivedData = str(org_rece)
+
     print('receiveData: ' + receivedData)
     tem.send_vali(clientSocket=clientSocket, receivedData=receivedData)
     while True:
-        receivedData = str(clientSocket.recv(2048))
-        text = tem.parse_data(msg=receivedData)
+        print('connect ended===============')
+        org_rece = clientSocket.recv(2048)
+        print(org_rece)
+        receivedData = str(org_rece)
+        print(org_rece.decode('iso-8859-1'))
+        # text = tem.parse_data(msg=receivedData)
+        text, te2 = tem.message_decode(data=receivedData)
+        print(text)
+        print(te2)
         print("parse data: " + text)
         tem.sendMessage(clientSocket=clientSocket, message=text)
