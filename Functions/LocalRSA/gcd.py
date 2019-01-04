@@ -1,3 +1,6 @@
+
+
+# 求两个数字的最大公约数（欧几里得算法）
 def greatestCommonDivisor(a, b):
     if b:
         return greatestCommonDivisor(b, a % b)
