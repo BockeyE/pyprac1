@@ -45,7 +45,7 @@ class Th(threading.Thread):
                 print(str(e))
                 print('except!')
 
-        self.con.close()
+        # self.con.close()
 
     def unpack_frame(self, num):
         data = self.con.recv(num)
