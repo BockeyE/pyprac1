@@ -3,7 +3,6 @@
 (base ^ exponent) mod n
 '''
 
-
 def exp_mode(base, exponent, n):
     bin_array = bin(exponent)[2:][::-1]
     r = len(bin_array)
@@ -19,7 +18,6 @@ def exp_mode(base, exponent, n):
 
     a_w_b = __multi(base_array, bin_array)
     return a_w_b % n
-
 
 def __multi(array, bin_array):
     result = 1
