@@ -13,7 +13,6 @@ def greatestCommonDivisor(a, b):
 计算 ax + by = 1中的x与y的整数解（a与b互质）
 '''
 
-
 def ext_GreatestCommonDivisor(a, b):
     if b:
         r, x1, y1 = ext_GreatestCommonDivisor(b, a % b)
@@ -31,3 +30,4 @@ def ext_GreatestCommonDivisor(a, b):
         y = y1
         r = a
         return r, x, y
+
