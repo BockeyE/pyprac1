@@ -8,3 +8,5 @@ opencv-contrib-python
 sklearn
 click
 xlrd
+
+pyinstaller -F auto.py
