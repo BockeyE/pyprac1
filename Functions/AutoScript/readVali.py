@@ -14,8 +14,11 @@ import os
 # print(os.path.getsize(vali))
 
 print('====')
+img = cv2.imread(vali1)
+# 灰度化处理
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 img1 = Image.open(vali1)
-code1 = pytesseract.image_to_string(img1)
+code1 = pytesseract.image_to_string(gray)
 print('read pic1')
 print(code1)
 img2 = Image.open(vali2)
