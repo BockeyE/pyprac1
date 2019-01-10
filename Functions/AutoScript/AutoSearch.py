@@ -1,4 +1,5 @@
 import copy
+import os
 import time
 
 import xlrd
@@ -9,6 +10,60 @@ import sys
 from selenium.webdriver.common.alert import Alert
 
 
+def mkdir(path):
+    import os
+    path = path.strip()
+    # 去除尾部 \ 符号
+    path = path.rstrip("\\")
+    # 判断路径是否存在
+    isExists = os.path.exists(path)
+    # 判断结果
+    if not isExists:
+        # 如果不存在则创建目录
+        os.makedirs(path)
+        return True
+    else:
+        # 如果目录存在则不创建，并提示目录已存在
+        return False
+
+
+# 定义要创建的目录
+mkpath = "c:\\auto\\down\\"
+# 调用函数
+mkdir(mkpath)
+
+
+def rename_latest(uppath, newname,k):
+    try:
+        files = os.listdir(uppath)
+        wholefiles = []
+        for f in files:
+            f = uppath + f
+            wholefiles.append(f)
+        tem = max(wholefiles, key=os.path.getctime)
+        os.rename(os.path.join(tem), os.path.join(uppath, newname) + ".pdf")
+    except Exception as e:
+        print("-------文件已经存在，请注意移走已经查询过的文件，下载继续执行。错误文件： NO." + str(k) + "------")
+
+
+def circle_download(page1, p, target_com, k):
+    page1.find_element_by_xpath(
+        '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(p + 3) + ']/td[7]/span').click()
+    # //*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[4]/td[7]/span
+    # 获取当前列是主要 机构名
+    filelatter = page1.find_element_by_xpath(
+        '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(p + 3) + ']/td[6]').text
+    page1.switch_to_window(page.window_handles[1])
+
+    page1.find_element_by_xpath('//*[@id="tab"]/tbody/tr[2]/td[2]/a').click()
+    time.sleep(0.3)
+    # 机构名与主体名拼接成新文件名称
+    rename_latest(mkpath, target_com + "_" + filelatter + "_NO." + str(k), k)
+    page1.close()
+
+    page1.switch_to_window(page.window_handles[0])
+
+
 def getlines():
     workbook = xlrd.open_workbook(r'C:\auto\search_company.xlsx')
     target_sheet = workbook.sheet_by_index(0)  # sheet索引从0开始
@@ -17,7 +72,7 @@ def getlines():
 
 
 def readRow(row_num):
-    workbook = xlrd.open_workbook(r'C:\auto\serach_company.xlsx')
+    workbook = xlrd.open_workbook(r'C:\auto\search_company.xlsx')
     print('读取的excel 页： ' + str(workbook.sheet_names()) + '。读取行数是： ' + str(row_num))
     target_sheet = workbook.sheet_by_index(0)  # sheet索引从0开始
     # 获取整行和整列的值（数组）
@@ -25,7 +80,11 @@ def readRow(row_num):
     return rows
 
 
-page = webdriver.Chrome()  # 打开浏览器
+opts = webdriver.ChromeOptions()
+prefs = {'profile.default_content_settings.popups': 2, 'download.default_directory': mkpath}
+opts.add_experimental_option('prefs', prefs)
+
+page = webdriver.Chrome(chrome_options=opts)  # 打开浏览器
 page.get('https://www.zhongdengwang.org.cn/')
 title = page.title  # 获得网页title
 print('网页title： ' + title)
@@ -79,6 +138,7 @@ lines = getlines()
 for i in range(lines - 1):
     rows = readRow(i + 1)
     target_com = rows[0]
+    print('--------正在查询的目标是： ' + target_com + ' ---------')
     # 点击按主体查询
     page.find_element_by_xpath(
         "/html/body/div[2]/table[6]/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr[1]/td/a").click()
@@ -111,12 +171,26 @@ for i in range(lines - 1):
     rec_count = page.find_element_by_xpath('//*[@id="detail_count"]').text
     rec_count = int(rec_count)
 
-    if rec_count:
-        print("查询结果已经显示，请在命令行下方输入验证码，回车即开始下载")
+    if rec_count > 100:
+        print("查询结果已经显示，记录数超过100，开始逐个下载")
+        for k in range(8, 20):
+            m = k % 10
+            if m:
+                circle_download(page, m, target_com, k)
+            else:
+                circle_download(page, 10, target_com, k)
+                page.find_element_by_xpath('//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[14]/td/div/a[3]').click()
+        continue
+    elif 10 <= rec_count <= 100:
+        rec_count = 10
+    elif rec_count:
+
+        print("查询结果已经显示，请在命令行下方输入验证码，回车即开始打包下载")
         print("请输入验证码：")
         vali3 = raw_input()
         # 输入验证码
         position = rec_count + 5
+        print('position' + str(position))
         page.find_element_by_xpath(
             '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(position) + ']/td/input').send_keys(vali3)
 
