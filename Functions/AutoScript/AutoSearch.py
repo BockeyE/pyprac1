@@ -8,8 +8,22 @@ import sys
 
 from selenium.webdriver.common.alert import Alert
 
-com1 = ''
-com2 = ''
+
+def getlines():
+    workbook = xlrd.open_workbook(r'C:\auto\search_company.xlsx')
+    target_sheet = workbook.sheet_by_index(0)  # sheet索引从0开始
+    # 获取整行和整列的值（数组）
+    return target_sheet.nrows
+
+
+def readRow(row_num):
+    workbook = xlrd.open_workbook(r'C:\auto\serach_company.xlsx')
+    print('读取的excel 页： ' + str(workbook.sheet_names()) + '。读取行数是： ' + str(row_num))
+    target_sheet = workbook.sheet_by_index(0)  # sheet索引从0开始
+    # 获取整行和整列的值（数组）
+    rows = target_sheet.row_values(row_num)  # 获取行内容
+    return rows
+
 
 page = webdriver.Chrome()  # 打开浏览器
 page.get('https://www.zhongdengwang.org.cn/')
@@ -30,7 +44,7 @@ while True:
     page.find_element_by_id('userCode').send_keys(name)
     page.find_element_by_id('showpassword').click()
     page.find_element_by_id('password').send_keys(pasw)
-    print('请输入图片验证码： ')
+    print('--请输入图片验证码： -------')
     vali = raw_input()
     print('您输入的验证码为： ' + vali)
     page.find_element_by_id('validateCode').send_keys(vali)
@@ -57,54 +71,67 @@ page.maximize_window()
 # 点击登陆按钮
 
 # 跳出frame
+
 page.switch_to.parent_frame()
 
-# 点击按主体查询
-page.find_element_by_xpath(
-    "/html/body/div[2]/table[6]/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr[1]/td/a").click()
+lines = getlines()
 
-# 点击 按投资金融入方查询
-page.find_element_by_xpath(
-    "/html/body/div[2]/table[1]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr[1]/td/a").click()
+for i in range(lines - 1):
+    rows = readRow(i + 1)
+    target_com = rows[0]
+    # 点击按主体查询
+    page.find_element_by_xpath(
+        "/html/body/div[2]/table[6]/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr[1]/td/a").click()
 
-# 填写各项出让人信息
-# 填写 资金融入方名称
-page.find_element_by_xpath('//*[@id="name"]').send_keys(com2)
+    # 点击 按投资金融入方查询
+    page.find_element_by_xpath(
+        "/html/body/div[2]/table[1]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr[1]/td/a").click()
 
-print("资金融入方名称已经填写完毕，请按照下面的验证码图片，在命令行下方输入验证码，回车确定")
-print("请输入验证码：")
-vali2 = raw_input()
-# 填写验证码
-page.find_element_by_xpath('//*[@id="validateCode"]').send_keys(vali2)
+    # 填写各项出让人信息
+    # 填写 资金融入方名称
+    page.find_element_by_xpath('//*[@id="name"]').send_keys(target_com)
 
-# 点击，勾选 需要查询证明
-page.find_element_by_xpath('//*[@id="confirm"]').click()
-print('------验证正确，脚本继续执行---------------------------------')
-# 点击，查询按钮
-page.find_element_by_xpath('//*[@id="query"]').click()
-
-# 点击 查看应收账款质押和转让登记
-page.find_element_by_xpath('//*[@id="code"]/td[2]/a').click()
-
-# 检查是否有记录
-
-rec_count = page.find_element_by_xpath('//*[@id="detail_count"]').text
-rec_count = int(rec_count)
-
-if rec_count:
-    print("查询结果已经显示，请按照下面的验证码图片，在命令行下方输入验证码，回车确定")
+    print("资金融入方名称已经填写完毕，请按照下面的验证码图片，在命令行下方输入验证码，回车确定")
     print("请输入验证码：")
-    vali3 = raw_input()
-    # 输入验证码
-    position = rec_count + 5
-    page.find_element_by_xpath(
-        '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(position) + ']/td/input').send_keys(vali3)
+    vali2 = raw_input()
+    # 填写验证码
+    page.find_element_by_xpath('//*[@id="validateCode"]').send_keys(vali2)
 
-    # 点击附件下载 链接
-    page.find_element_by_xpath(
-        '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(position) + ']/td/span').click()
+    # 点击，勾选 需要查询证明
+    page.find_element_by_xpath('//*[@id="confirm"]').click()
+    print('------验证正确，脚本继续执行---------------------------------')
+    # 点击，查询按钮
+    page.find_element_by_xpath('//*[@id="query"]').click()
 
-else:
-    print("查询无结果，截图至目录")
-    page.maximize_window()
-    page.get_screenshot_as_file('C:\\auto\\pics\\' + com2 + '_查询结果.png')
+    # 点击 查看应收账款质押和转让登记
+    page.find_element_by_xpath('//*[@id="code"]/td[2]/a').click()
+
+    # 检查是否有记录
+
+    rec_count = page.find_element_by_xpath('//*[@id="detail_count"]').text
+    rec_count = int(rec_count)
+
+    if rec_count:
+        print("查询结果已经显示，请在命令行下方输入验证码，回车即开始下载")
+        print("请输入验证码：")
+        vali3 = raw_input()
+        # 输入验证码
+        position = rec_count + 5
+        page.find_element_by_xpath(
+            '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(position) + ']/td/input').send_keys(vali3)
+
+        # 点击附件下载 链接
+        page.find_element_by_xpath(
+            '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(position) + ']/td/span').click()
+
+    else:
+        print("查询无结果，截图至目录 c:/auto/pics，")
+        page.maximize_window()
+        page.get_screenshot_as_file('C:\\auto\\pics\\' + target_com + '_查询结果.png')
+
+    print("请在键盘输入任意字符，继续执行excel中待查的查询")
+    vali2 = raw_input()
+    # 返回主页
+    page.find_element_by_xpath('//*[@id="dc"]/table/tbody/tr/td/table[4]/tbody/tr/td[2]/input').click()
+
+print("表格中的数据已经查询完毕，退出程序")
