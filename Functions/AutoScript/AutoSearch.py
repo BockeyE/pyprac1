@@ -33,7 +33,16 @@ mkpath = "c:\\auto\\down\\"
 mkdir(mkpath)
 
 
-def rename_latest(uppath, newname,k):
+def pdf_count(mkpath):
+    files = os.listdir(mkpath)
+    count = 0
+    for f in files:
+        if f.endswith("pdf"):
+            count += 1
+    return count
+
+
+def rename_latest(uppath, newname, k):
     try:
         files = os.listdir(uppath)
         wholefiles = []
@@ -42,11 +51,12 @@ def rename_latest(uppath, newname,k):
             wholefiles.append(f)
         tem = max(wholefiles, key=os.path.getctime)
         os.rename(os.path.join(tem), os.path.join(uppath, newname) + ".pdf")
-    except Exception as e:
+    except Exception:
         print("-------文件已经存在，请注意移走已经查询过的文件，下载继续执行。错误文件： NO." + str(k) + "------")
 
 
 def circle_download(page1, p, target_com, k):
+    count1 = pdf_count(mkpath)
     page1.find_element_by_xpath(
         '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(p + 3) + ']/td[7]/span').click()
     # //*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[4]/td[7]/span
@@ -54,13 +64,18 @@ def circle_download(page1, p, target_com, k):
     filelatter = page1.find_element_by_xpath(
         '//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[' + str(p + 3) + ']/td[6]').text
     page1.switch_to_window(page.window_handles[1])
-
     page1.find_element_by_xpath('//*[@id="tab"]/tbody/tr[2]/td[2]/a').click()
-    time.sleep(0.3)
+    count2 = pdf_count(mkpath)
+    while 1:
+        if count2 == count1:
+            time.sleep(0.1)
+            count2 = pdf_count(mkpath)
+            continue
+        else:
+            break
     # 机构名与主体名拼接成新文件名称
     rename_latest(mkpath, target_com + "_" + filelatter + "_NO." + str(k), k)
     page1.close()
-
     page1.switch_to_window(page.window_handles[0])
 
 
@@ -108,7 +123,7 @@ while True:
     print('您输入的验证码为： ' + vali)
     page.find_element_by_id('validateCode').send_keys(vali)
     page.find_element_by_id('login_btn').click()
-    time.sleep(0.2)
+    time.sleep(0.5)
     try:
         check_info = page.find_element_by_xpath('//*[@id="con_one_1"]/div[3]').text
         print(check_info)
@@ -118,10 +133,6 @@ while True:
             continue
     except Exception:
         break
-
-# if not vali == 'go':
-#     print('不执行脚本，即将退出')
-#     exit()
 
 # 最大化窗口
 print('验证成功，继续执行')
@@ -173,13 +184,17 @@ for i in range(lines - 1):
 
     if rec_count > 100:
         print("查询结果已经显示，记录数超过100，开始逐个下载")
-        for k in range(8, 20):
+        for k in range(8, 12):
             m = k % 10
             if m:
                 circle_download(page, m, target_com, k)
             else:
                 circle_download(page, 10, target_com, k)
                 page.find_element_by_xpath('//*[@id="dc"]/table/tbody/tr/td/table[2]/tbody/tr[14]/td/div/a[3]').click()
+        print("该名称下的文件已经下载完毕，请输入任意命令，继续执行文档中未执行的查询")
+        vali2 = raw_input()
+        # 返回主页
+        page.find_element_by_xpath('//*[@id="dc"]/table/tbody/tr/td/table[4]/tbody/tr/td[2]/input').click()
         continue
     elif 10 <= rec_count <= 100:
         rec_count = 10
