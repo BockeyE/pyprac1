@@ -107,6 +107,7 @@ page.get('https://www.zhongdengwang.org.cn/')
 cs = page.get_cookies()
 print(cs)
 
+
 name = ''
 pasw = ''
 # 切换到frame
