@@ -125,39 +125,42 @@ def getlines():
     return target_sheet.nrows
 
 
-def zip_count(dirpath):
+def zip_tem_latest(dirpath):
     files = os.listdir(dirpath)
-    count = 0
+    tem = ''
     for f in files:
-        if f.endswith("zip"):
-            count += 1
-    return count
+        if f.endswith("crdownload"):
+            tem = f.split('.')[0]
+    print(tem)
+    return tem
+
+
+def check_end(dirpath, prename):
+    files = os.listdir(dirpath)
+    for f in files:
+        if (f.endswith('zip')) and (f.startswith(prename)):
+            return f
+        else:
+            return False
 
 
 def zip_listen(dirpath, newname):
-    cou1 = zip_count(dirpath)
+    tem1 = zip_tem_latest(dirpath)
     while True:
         time.sleep(1)
-        cou2 = zip_count(dirpath)
-        if cou1 == cou2:
-            continue
-        else:
+        f = check_end(dirpath, tem1)
+        if f:
             break
-    rename_latest_zip(dirpath, newname)
+        else:
+            continue
+    rename_aim_zip(dirpath, f, newname)
     print('后台下载： ' + newname + ' 已经完成')
     return
 
 
-def rename_latest_zip(dirpath, newname):
+def rename_aim_zip(dirpath, file, newname):
     try:
-        files = os.listdir(dirpath)
-        wholefiles = []
-        for f in files:
-            f = dirpath + f
-            if f.endswith('zip'):
-                wholefiles.append(f)
-        tem = max(wholefiles, key=os.path.getctime)
-        os.rename(os.path.join(tem), os.path.join(dirpath, newname) + ".zip")
+        os.rename(os.path.join(dirpath, file), os.path.join(dirpath, newname) + ".zip")
     except Exception:
         print("-------文件已经存在，请注意移走已有文件。错误目标： " + newname + "------")
 
@@ -241,8 +244,11 @@ def start_action():
             # 填写验证码
             page.find_element_by_xpath('//*[@id="validateCode"]').send_keys(vali2)
             page.find_element_by_xpath('//*[@id="confirm"]').click()
-            time.sleep(0.1)
+            # 点击，查询按钮
+            page.find_element_by_xpath('//*[@id="query"]').click()
+
             try:
+                #//*[@id="query"]
                 res1 = page.find_element_by_xpath('//*[@id="code"]').text
                 if res1 == '校验码错误':
                     print("验证码有误，请重输入：")
@@ -253,8 +259,7 @@ def start_action():
                 break
         # 点击，勾选 需要查询证明
         print('------验证正确，脚本继续执行---------------------------------')
-        # 点击，查询按钮
-        page.find_element_by_xpath('//*[@id="query"]').click()
+
         # 点击 查看应收账款质押和转让登记
         page.find_element_by_xpath('//*[@id="code"]/td[2]/a').click()
         # 检查是否有记录
