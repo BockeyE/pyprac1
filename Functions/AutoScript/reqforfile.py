@@ -51,10 +51,56 @@ JSESSIONID=235473429.20480.0000
 JSESSIONID=235473429.20480.0000
 JSESSIONID=E9E60EF9115FAD0293FA84CB996873B4; BIGipServerpool_zdw_www=+wr22ke2q2N+qql1wNGcmNIDgPeiHKk/D3OniUz6+Rhth8Ll1m3xu64oN9T49/h+yjpUcKwzfVpK/w==; BIGipServerpool_rs=dHzTZk+QFoJktIdbgfFJe/GX0Jl48Auk/0yNPStZeae5kefdi78/yQfTyAAew1yq9g1ptko1SESyoCk=; RSOUT=rPnWc4YNWhQpJpf5hLJcL7QffPTSgZ22hspprxQG9LyHslngF5wP!2063536598
 '''
-import os
 
+import os
+from urllib.parse import unquote
+
+import requests
 from click._compat import raw_input
 from selenium import webdriver
+
+
+def download_file(payload, dirpath):
+    url = "https://www.zhongdengwang.org.cn/rs/conditionquery/byid.do?method=downloadregfile"
+    r = requests.post(url, data=payload, headers=headers)
+    file = r.content
+    with open(os.path.join(dirpath, (str(regno) + '.pdf')), 'wb') as f:  # 保存文件
+        f.write(file)
+
+
+def getattach_by_href(href):
+    cre = '()'
+    aim = ''
+    flag1 = False
+    for c in href:
+        if c == cre[0]:
+            flag1 = True
+            continue
+        if c == cre[1]:
+            flag1 = False
+        if flag1:
+            aim = aim + c
+    a, b = aim.split(',')
+    a = a.split('\'')[1]
+    b = b.split('\'')[1]
+    b = unquote(b, 'utf-8')
+    print(b)
+    return a, b
+
+
+def download_attach(pagea, position, payloada, dirpath):
+    url = "https://www.zhongdengwang.org.cn/rs/conditionquery/byid.do?method=downloadattach"
+    href = pagea.find_element_by_xpath(('//*[@id="tab"]/tbody/tr[' + str(position) + ']/td[2]/a')).get_attribute('href')
+    save_name, show_name = getattach_by_href(href)
+    payloada['save_name'] = save_name
+    payloada['show_name'] = show_name
+    r = requests.post(url, data=payloada, headers=headers)
+    file = r.content
+    with open(os.path.join(dirpath, show_name), 'wb') as f:  # 保存文件
+        f.write(file)
+    # '//*[@id="tab"]/tbody/tr[3]/td[2]/a'
+    # '//*[@id="tab"]/tbody/tr[4]/td[2]/a'
+
 
 page = webdriver.Chrome()
 page.get('https://www.zhongdengwang.org.cn/')
@@ -88,8 +134,6 @@ vali = raw_input()
 print('go to view file')
 page.get('https://www.zhongdengwang.org.cn/rs/conditionquery/byid.do?method=viewfile&regno=03291588000396823873&type=1')
 
-import requests
-
 headers = {
     'Connection': 'keep-alive',
     'Content-Length': '133',
@@ -108,13 +152,11 @@ headers = {
 
 regno = page.find_element_by_xpath('//*[@id="regno"]').get_attribute('value')
 type = page.find_element_by_xpath('//*[@id="type"]').get_attribute('value')
-save_name = page.find_element_by_xpath('//*[@id="save_name"]').get_attribute('value')
-show_name = page.find_element_by_xpath('//*[@id="show_name"]').get_attribute('value')
-print(str(regno) + str(type) + str(save_name) + str(show_name))
+
 payload = {'regno': regno,
            'type': type,
-           'save_name': save_name,
-           'show_name': show_name,
+           'save_name': '',
+           'show_name': '',
            }
 urla = 'https://www.zhongdengwang.org.cn/rs/conditionquery/byid.do?method=downloadregfile'
 r = requests.post(urla, data=payload, headers=headers)
@@ -123,6 +165,7 @@ print('sent post')
 # 下载服务器download目录下的指定文件
 
 file = r.content  # 获取文件内容
-basepath = r'c:\auto\down'
-with open(os.path.join(basepath, 'hello_download.pdf'), 'wb') as f:  # 保存文件
-    f.write(file)
+dirpath = r'c:\auto\down'
+
+download_file(payload, dirpath)
+download_attach(page, 3, payload, dirpath)
