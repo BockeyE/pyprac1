@@ -28,9 +28,9 @@ def read_captcha(path):
     """
     image_array = []
     image_label = []
-    file_list = os.listdir(captcha_path)  # 获取captcha文件
+    file_list = os.listdir(path)  # 获取captcha文件
     for file in file_list:
-        image = Image.open(captcha_path + '/' + file)  # 打开图片
+        image = Image.open(path + '/' + file)  # 打开图片
         file_name = file.split(".")[0]
         image_array.append(image)
         image_label.append(file_name)
@@ -219,7 +219,7 @@ def image_split(image):
     for x in range(image.size[0]):
         for y in range(image.size[1]):
             pix = image.getpixel((x, y))
-            if pix != True:
+            if not pix:
                 inletter = True
         if foundletter == False and inletter == True:
             foundletter = True
@@ -279,11 +279,11 @@ def image_save(image_array, image_label):
     :return:
     """
     for num, image_meta in enumerate(image_array):
-        file_path = captcha__clean_path + '/'+ image_label[num]
+        file_path = captcha__clean_path + '/' + image_label[num]
         file_name = str(int(time.time())) + '_' + str(random.randint(0, 100)) + '.gif'
         if not os.path.exists(file_path):
             os.makedirs(file_path)
-        image_meta.save(file_path + '/'+file_name, 'gif')
+        image_meta.save(file_path + '/' + file_name, 'gif')
 
 
 def main():

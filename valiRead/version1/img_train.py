@@ -1,13 +1,11 @@
-#-*- coding:utf-8 -*
-
+# -*- coding:utf-8 -*
 import numpy as np
-
 from learnV2 import img_feature, img_model
 from learnV2.config import *
 import configparser
 
 
-#读取配置文件
+# 读取配置文件
 # config = configparser.ConfigParser()
 # config.read("./config.ini")
 # captcha_path = config.get("global", "captcha_path") #训练集验证码存放路径
@@ -22,14 +20,10 @@ import configparser
 # image_height = config.get("global", "image_height") #标准化的图像高度（像素）
 
 
-
-
-
 def main():
     # image_process.main() #处理原始验证码，并存到文件
     # feature, label = image_feature.main() #特征处理
-
-    #特征处理
+    # 特征处理
     image_array, label = img_feature.read_train_data()
     feature = []
     for num, image in enumerate(image_array):
@@ -39,11 +33,8 @@ def main():
         feature.append(feature_vec)
     print(np.array(feature).shape)
     print(np.array(label).shape)
-
-    #训练模型
+    # 训练模型
     result = img_model.trainModel(feature, label)
-
-
 
 
 if __name__ == '__main__':

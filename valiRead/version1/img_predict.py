@@ -28,7 +28,7 @@ def clean():
     # 验证码清理
     image_array, image_label = img_process.read_captcha(test_data_path)  # 读取待测试验证码文件
     print("待测试的验证码数量：", len(image_array))
-    image_clean = img_process.image_transfer(image_array)  # 转换成灰度图像，并去除背景噪声
+    image_clean = img_process.image_transfer(image_array,image_label)  # 转换成灰度图像，并去除背景噪声
     image_array = []  # [[im_1_1,im_1_2,im_1_3,im_1_4],[im_2_1,im_2_2,im_2_3,im_2_4],...]
     for each_image in image_clean:
         image_out = img_process.get_clear_bin_image(each_image)  # 转换为二值图片，并去除剩余噪声点
