@@ -29,27 +29,21 @@ from pynput.keyboard import Key, Listener
 
 
 def on_press(key):
-    # 监听按键
-    print('{0} pressed'.format(key))
     if type(key) == Key:
         pass
     else:
         if key.char == 'd':
+            keyboard.press('g')
+            keyboard.release('g')
             time.sleep(0.5)
-            keyboard.press('d')
-            print('d 0.1s later')
+            keyboard.press('g')
+            keyboard.release('g')
+            print('double g 0.5s later')
             return
 
 
 def on_release(key):
-    # 监听释放
-    print('{0} release'.format(key))
-    print(key)
-    # if key == Key.esc:
-    #     # Stop listener
-    #     return False
-
-    # Stop listener
+    pass
 
 
 # 连接事件以及释放
