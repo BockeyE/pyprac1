@@ -35,7 +35,7 @@ def on_press(key):
         pass
     else:
         if key.char == 'd':
-            time.sleep(0.75)
+            time.sleep(0.5)
             keyboard.press('d')
             print('d 0.1s later')
             return
