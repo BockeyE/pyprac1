@@ -8,7 +8,6 @@ keyboard = Controller()
 def on_press(key):
     if type(key) == Key:
         return
-
     if key.char == 'd':
         r = random.randint(42, 58)
         keyboard.press('g')
