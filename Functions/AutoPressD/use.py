@@ -8,14 +8,7 @@ keyboard = Controller()
 def on_press(key):
     if type(key) == Key:
         return
-        # else:
-    #     if key.char == '9':
-    #         flag = flag + 1
-    #         return
-    #     elif key.char == '8':
-    #         flag = flag - 3
-    #         return
-    #     elif flag == 3 and key.char == 'd':
+
     if key.char == 'd':
         r = random.randint(42, 58)
         keyboard.press('g')
