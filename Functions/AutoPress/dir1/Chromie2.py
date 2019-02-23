@@ -10,7 +10,7 @@ def on_press(key):
     if type(key) == Key:
         pass
     else:
-        if key.char == 'y':
+        if key.char == 't':
             pos = mouse._position_get()
             print(pos)
             keyboard.press('r')
