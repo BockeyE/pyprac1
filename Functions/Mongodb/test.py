@@ -157,7 +157,7 @@ if __name__ == '__main__':
     OPTS = {
         'host': '192.168.3.183',
         "port": 27020,
-        "dbname": 'turingchain',
+        "dbname": '',
         "connection_timeout": 5000,
         "max_tries": 3
     }
@@ -172,7 +172,7 @@ if __name__ == '__main__':
         {'$match': {'$and': [{'$or': [{
             'trans_details.asset.data.id': ''},
             {'trans_details.id': ''}]},
-            {'trans_details.operation': {'$ne': 'CONTRACT_TRANSFER'}}]}},
+            {'trans_details.operation': {'$ne': ''}}]}},
         {'$sort': {'height': -1}},
         {'$limit': 1}
     ]
@@ -192,9 +192,9 @@ if __name__ == '__main__':
             ]}
         }
     ]
-    # res = conn.run(conn.collection('blocks').aggregate(sql2, allowDiskUse=True))
-    # res = conn.run(conn.collection('blocks').find(sort=[('block_header.time', -1)], limit=10))
-    res = conn.run(conn.collection('transactions').aggregate(sql3, allowDiskUse=True))
+    # res = conn.run(conn.collection('').aggregate(sql2, allowDiskUse=True))
+    # res = conn.run(conn.collection('').find(sort=[('block_header.time', -1)], limit=10))
+    res = conn.run(conn.collection('').aggregate(sql3, allowDiskUse=True))
 
     print(res)
     for k in res:
