@@ -195,7 +195,10 @@ if __name__ == '__main__':
     # res = conn.run(conn.collection('').aggregate(sql2, allowDiskUse=True))
     # res = conn.run(conn.collection('').find(sort=[('block_header.time', -1)], limit=10))
     res = conn.run(conn.collection('').aggregate(sql3, allowDiskUse=True))
-
+    res1 = conn.run(conn.collection('transactions').find({'$and': [
+        {'inputs.owners_before': 'GDAF71Hpr9jBpkbZvbh34kLVVUwCYjuzYw4yooJ6Jkro'},
+        {'outputs.public_keys': {'$ne': 'GDAF71Hpr9jBpkbZvbh34kLVVUwCYjuzYw4yooJ6Jkro'}}]}
+    )).count()
     print(res)
     for k in res:
         print(k)
