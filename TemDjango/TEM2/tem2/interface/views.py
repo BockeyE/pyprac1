@@ -19,11 +19,9 @@ def handle_tx(request):
     # data = request.data
     # print(data)
     # prepared_token_tx = bdb.transactions.prepare(
-    #     operation='CONTRACT_EXECUTE',
+    #     operation='CREATE',
     #     signers=A_pub_key,
     #     recipients=[([A_pub_key], 10)],
-    #     # asset={"id": fulfilled_token_tx['id']},
-    #     # asset={"id": "35b94760bc18b394fef46639e63b8d76f5f5e11943c18460b44c7f32792b820d"},
     #     asset={"id": "8fd262e48cf4934494725a5a40527bc51da74a533c0083c17990309bf4775600"},
     #     metadata={"call": "cross_transfer(\"test\",1002)"})
 
