@@ -39,8 +39,6 @@ def no(**kwargs):
 # exec('print(sqrt(9))', {'sqrt': sqrt, 'pow': pow})
 exec('exec(\'print(sqrt(9))\')', {'sqrt': no, 'pow': pow})
 
-
-
 '''用户不传递globals字典时，默认会传递一个字典(是什么不知道，应该是当前的全局变量、函数和内置函数)。
 用户只传递globals字典时，如果传递空字典，exec内只能访问内置函数(__builtins__)
 用户只传递globals字典时，如果传递非空字典，exec内只能访问内置函数(__builtins__)、字典中包含的函数和变量（变量只是一个拷贝，内部修改了不会影响外面的变量，外面修改了不会影响内部的变量）。
