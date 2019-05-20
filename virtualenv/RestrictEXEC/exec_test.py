@@ -18,10 +18,6 @@
 import math
 
 exec('print(dir())', {})
-# ['func']
-# ['a', 'func']
-# 5
-# in func
 
 
 from math import *
