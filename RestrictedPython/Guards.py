@@ -15,6 +15,7 @@
 # AccessControl.ZopeGuards contains a large set of wrappers for builtins.
 # DocumentTemplate.DT_UTil contains a few.
 
+
 import builtins
 
 safe_builtins = {}
@@ -48,42 +49,11 @@ _safe_names = [
     'tuple',
     'zip',
     '__name__',
-    'exec',
-    'print',
     'property',
     'object',
     'super',
-    'type',
-    'filter',
-    'delattr',
-    'setattr',
-    'dir',
-    'memoryview',
-    'dict',
-    'enumerate',
-    'filter',
     'getattr',
-    'hasattr',
-    'iter',
-    'list',
-    'map',
-    'max',
-    'min',
-    'sum',
-    'all',
-    'any',
-    'compile',
-    'dir',
-    '__doc__',
-    '__package__',
-    '__loader__',
-    '__spec__',
-    '__build_class__',
-    'globals',
-    'locals',
-    'vars',
-    # '_getattr_'
-
+    'print',
 ]
 
 _safe_exceptions = [
@@ -275,14 +245,14 @@ def guarded_delattr(object, name):
 safe_builtins['delattr'] = guarded_delattr
 
 
-def safer_getattr(object, name, default=None, getattrs=getattr):
+def safer_getattr(object, name, default=None, getattr=getattr):
     """Getattr implementation which prevents using format on string objects.
 
     format() is considered harmful:
     http://lucumr.pocoo.org/2016/12/29/careful-with-str-format/
 
     """
-    if isinstance(object, str) and name == 'format':
+    if isinstance(object, _compat.basestring) and name == 'format':
         raise NotImplementedError(
             'Using format() on a %s is not safe.' % object.__class__.__name__)
     if name.startswith('_'):
@@ -290,7 +260,7 @@ def safer_getattr(object, name, default=None, getattrs=getattr):
             '"{name}" is an invalid attribute name because it '
             'starts with "_"'.format(name=name)
         )
-    return getattrs(object, name, default)
+    return getattr(object, name, default)
 
 
 safe_builtins['_getattr_'] = safer_getattr
