@@ -1,158 +1,25 @@
-aaaaaS
-
-{'AutoReconnect': <class 'pymongo.errors.AutoReconnect'>,
-'DuplicateKeyError': <class 'pymongo.errors.DuplicateKeyError'>,
-'pOperationFailure': <class 'pymongo.errors.OperationFailure'>,
-'MongoClient': <class 'pymongo.mongo_client.MongoClient'>,
-'ConnectionFailure': <class 'pymongo.errors.ConnectionFailure'>,
-'ConfigurationError': <class 'pymongo.errors.ConfigurationError'>,
-'CERT_REQUIRED': <VerifyMode.CERT_REQUIRED: 2>,
-'__import__': None,
-'__builtins__':
-    {
-    '__name__': 'builtins',
-    '__doc__': "Built-in functions, exceptions, and other objects.\n\nNoteworthy: None is the `nil' object; Ellipsis represents `...' in slices.",
-    '__package__': '',
-    '__loader__': <class '_frozen_importlib.BuiltinImporter'>,
-    '__spec__': ModuleSpec(name='builtins', loader=<class '_frozen_importlib.BuiltinImporter'>),
-    '__build_class__': <built-in function __build_class__>,
-    '__import__': <built-in function __import__>,
-    'abs': <built-in function abs>,
-    'all': <built-in function all>,
-    'any': <built-in function any>,
-    'ascii': <built-in function ascii>,
-    'bin': <built-in function bin>,
-    'callable': <built-in function callable>,
-    'chr': <built-in function chr>,
-    'compile': <built-in function compile>,
-    'delattr': <built-in function delattr>,
-    'dir': <built-in function dir>,
-    'divmod': <built-in function divmod>,
-    'eval': <built-in function eval>,
-    'exec': <built-in function exec>,
-    'format': <built-in function format>,
-    'getattr': <built-in function getattr>,
-    'globals': <built-in function globals>,
-    'hasattr': <built-in function hasattr>,
-    'hash': <built-in function hash>,
-    'hex': <built-in function hex>,
-    'id': <built-in function id>,
-    'input': <built-in function input>,
-    'isinstance': <built-in function isinstance>,
-    'issubclass': <built-in function issubclass>,
-    'iter': <built-in function iter>,
-    'len': <built-in function len>,
-    'locals': <built-in function locals>,
-    'max': <built-in function max>,
-    'min': <built-in function min>,
-    'next': <built-in function next>,
-    'oct': <built-in function oct>,
-    'ord': <built-in function ord>,
-    'pow': <built-in function pow>,
-    'print': <built-in function print>,
-    'repr': <built-in function repr>,
-    'round': <built-in function round>,
-    'setattr': <built-in function setattr>,
-    'sorted': <built-in function sorted>,
-    'sum': <built-in function sum>,
-    'vars': <built-in function vars>,
-    'None': None, 'Ellipsis': Ellipsis,
-    'NotImplemented': NotImplemented, 'False': False, 'True': True,
-    'bool': <class 'bool'>, 'memoryview': <class 'memoryview'>,
-    'bytearray': <class 'bytearray'>, 'bytes': <class 'bytes'>,
-    'classmethod': <class 'classmethod'>, 'complex': <class 'complex'>,
-    'dict': <class 'dict'>, 'enumerate': <class 'enumerate'>, 'filter': <class 'filter'>,
-    'float': <class 'float'>, 'frozenset': <class 'frozenset'>, 'property': <class 'property'>,
-    'int': <class 'int'>, 'list': <class 'list'>, 'map': <class 'map'>,
-    'object': <class 'object'>, 'range': <class 'range'>, 'reversed': <class 'reversed'>,
-    'set': <class 'set'>, 'slice': <class 'slice'>, 'staticmethod': <class 'staticmethod'>,
-    'str': <class 'str'>, 'super': <class 'super'>, 'tuple': <class 'tuple'>,
-    'type': <class 'type'>, 'zip': <class 'zip'>, '__debug__': True,
-    'BaseException': <class 'BaseException'>, 'Exception': <class 'Exception'>,
-    'TypeError': <class 'TypeError'>, 'StopAsyncIteration': <class 'StopAsyncIteration'>,
-    'StopIteration': <class 'StopIteration'>, 'GeneratorExit': <class 'GeneratorExit'>,
-    'SystemExit': <class 'SystemExit'>, 'KeyboardInterrupt': <class 'KeyboardInterrupt'>,
-    'ImportError': <class 'ImportError'>, 'ModuleNotFoundError': <class 'ModuleNotFoundError'>,
-    'OSError': <class 'OSError'>, 'EnvironmentError': <class 'OSError'>,
-    'IOError': <class 'OSError'>, 'WindowsError': <class 'OSError'>,
-    'EOFError': <class 'EOFError'>, 'RuntimeError': <class 'RuntimeError'>,
-    'RecursionError': <class 'RecursionError'>,
-    'NotImplementedError': <class 'NotImplementedError'>,
-    'NameError': <class 'NameError'>, 'UnboundLocalError': <class 'UnboundLocalError'>,
-    'AttributeError': <class 'AttributeError'>,
-    'SyntaxError': <class 'SyntaxError'>, 'IndentationError': <class 'IndentationError'>,
-    'TabError': <class 'TabError'>, 'LookupError': <class 'LookupError'>,
-    'IndexError': <class 'IndexError'>, 'KeyError': <class 'KeyError'>,
-    'ValueError': <class 'ValueError'>, 'UnicodeError': <class 'UnicodeError'>,
-    'UnicodeEncodeError': <class 'UnicodeEncodeError'>,
-    'UnicodeDecodeError': <class 'UnicodeDecodeError'>,
-    'UnicodeTranslateError': <class 'UnicodeTranslateError'>,
-    'AssertionError': <class 'AssertionError'>,
-    'ArithmeticError': <class 'ArithmeticError'>,
-    'FloatingPointError': <class 'FloatingPointError'>,
-    'OverflowError': <class 'OverflowError'>,
-    'ZeroDivisionError': <class 'ZeroDivisionError'>,
-    'SystemError': <class 'SystemError'>,
-    'ReferenceError': <class 'ReferenceError'>,
-    'BufferError': <class 'BufferError'>,
-    'MemoryError': <class 'MemoryError'>, 'Warning': <class 'Warning'>,
-    'UserWarning': <class 'UserWarning'>,
-    'DeprecationWarning': <class 'DeprecationWarning'>,
-    'PendingDeprecationWarning': <class 'PendingDeprecationWarning'>,
-    'SyntaxWarning': <class 'SyntaxWarning'>, 'RuntimeWarning': <class 'RuntimeWarning'>,
-    'FutureWarning': <class 'FutureWarning'>, 'ImportWarning': <class 'ImportWarning'>,
-    'UnicodeWarning': <class 'UnicodeWarning'>, 'BytesWarning': <class 'BytesWarning'>,
-    'ResourceWarning': <class 'ResourceWarning'>, 'ConnectionError': <class 'ConnectionError'>,
-    'BlockingIOError': <class 'BlockingIOError'>, 'BrokenPipeError': <class 'BrokenPipeError'>,
-    'ChildProcessError': <class 'ChildProcessError'>,
-    'ConnectionAbortedError': <class 'ConnectionAbortedError'>,
-    'ConnectionRefusedError': <class 'ConnectionRefusedError'>,
-    'ConnectionResetError': <class 'ConnectionResetError'>,
-    'FileExistsError': <class 'FileExistsError'>,
-    'FileNotFoundError': <class 'FileNotFoundError'>, 'IsADirectoryError': <class 'IsADirectoryError'>,
-    'NotADirectoryError': <class 'NotADirectoryError'>,
-    'InterruptedError': <class 'InterruptedError'>, 'PermissionError': <class 'PermissionError'>,
-    'ProcessLookupError': <class 'ProcessLookupError'>,
-    'TimeoutError': <class 'TimeoutError'>, 'open': <built-in function open>,
-    'quit': Use quit() or Ctrl-Z plus Return to exit, 'exit': Use exit() or Ctrl-Z plus Return to exit,
-    'license': Type license() to see the full license text,
-    'help': Type help() for interactive help, or help(object) for help about object.
-    },
-'MONGO_OPTS': {'socketTimeoutMS': 20000},
-'re': <module 're' from 'C:\\py367\\Python\\Python36\\lib\\re.py'>,
-'Lazy': <class 'Lazy'>,
-'Connection': <class 'Connection'>,
-'LocalMongoDBConnection': <class 'LocalMongoDBConnection'>,
-'Contract': <class 'Contract'>,
-'Token': <class 'Token'>}
-
-
-good
-
-
-
-
-
-
-fail
-
-{
-'__name__': '__main__',
+{'__name__': '__main__',
 '__doc__': None,
 '__package__': None,
-'__loader__': <_frozen_importlib_external.SourceFileLoader object at 0x0000022892D88080>,
-'__spec__': None,
-'__annotations__': {},
+'__loader__': <_frozen_importlib_external.SourceFileLoader object at 0x000002C5CE648080>,
+'__spec__': None, '__annotations__': {},
 '__builtins__': <module 'builtins' (built-in)>,
 '__file__': 'C:/ZZBK/persontest/test1/mysite/RestrictedPython/exec_test.py',
-'__cached__': None,
-'pymongo': <module 'pymongo' from 'C:\\py367\\Python\\Python36\\Lib\\site-packages\\pymongo\\__init__.py'>,
-'CERT_REQUIRED': <VerifyMode.CERT_REQUIRED: 2>,
-'safe_globals': {
-'__builtins__': <module 'builtins' (built-in)>,
-'__loader__': <_frozen_importlib_external.SourceFileLoader object at 0x0000022892D88080>},
-'f': <_io.TextIOWrapper name='fullc_clear.py' mode='r' encoding='UTF-8'>,
+'__cached__': None, 'pymongo': <module 'pymongo' from 'C:\\py367\\Python\\Python36\\Lib\\site-packages\\pymongo\\__init__.py'>, 'CERT_REQUIRED': <VerifyMode.CERT_REQUIRED: 2>,
+'safe_globals': {'__builtins__': {}},
+'gs': {...}}
 
-'gs': {...},
-'my': {...}}
-}
+
+
+safe:{'__builtins__': {}}
+
+
+
+
+exec
+
+
+['CERT_REQUIRED', 'Connection', 'Contract', 'Lazy', 'LocalMongoDBConnection', 'MONGO_OPTS', 'Token', '__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'contractobject', 'f', 'gs', 'main', 'meta2', 'pymongo', 'res', 'safe_globals']
+{'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': <_frozen_importlib_external.SourceFileLoader object at 0x0000023424C38080>, '__spec__': None, '__annotations__': {},
+'__builtins__': {}},
+'gs': {...}, 'MONGO_OPTS': {'socketTimeoutMS': 20000}, 'Lazy': <class '__main__.Lazy'>, 'Connection': <class '__main__.Connection'>, 'LocalMongoDBConnection': <class '__main__.LocalMongoDBConnection'>, 'Contract': <class '__main__.Contract'>, 'Token': <class '__main__.Token'>, 'main': <function main at 0x000002343C8F5A60>, 'contractobject': <__main__.Token object at 0x000002343C8FBDD8>, 'res': {'_id': ObjectId('5ce4c431d12e289a10080aa5'), 'time': 0, 'key': 'rate_update'}}

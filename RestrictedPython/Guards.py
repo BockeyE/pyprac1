@@ -59,8 +59,6 @@ _safe_names = [
     'setattr',
     'dir',
     'memoryview',
-    '__import__',
-
     'dict',
     'enumerate',
     'filter',
@@ -76,14 +74,15 @@ _safe_names = [
     'any',
     'compile',
     'dir',
-
-
+    '__doc__',
+    '__package__',
+    '__loader__',
+    '__spec__',
+    '__build_class__',
     'globals',
-    'input',
     'locals',
-    'open',
-
     'vars',
+    # '_getattr_'
 
 ]
 
@@ -276,7 +275,7 @@ def guarded_delattr(object, name):
 safe_builtins['delattr'] = guarded_delattr
 
 
-def safer_getattr(object, name, default=None, getattr=getattr):
+def safer_getattr(object, name, default=None, getattrs=getattr):
     """Getattr implementation which prevents using format on string objects.
 
     format() is considered harmful:
@@ -291,7 +290,7 @@ def safer_getattr(object, name, default=None, getattr=getattr):
             '"{name}" is an invalid attribute name because it '
             'starts with "_"'.format(name=name)
         )
-    return getattr(object, name, default)
+    return getattrs(object, name, default)
 
 
 safe_builtins['_getattr_'] = safer_getattr
