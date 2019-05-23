@@ -46,7 +46,45 @@ _safe_names = [
     'slice',
     'str',
     'tuple',
-    'zip'
+    'zip',
+    '__name__',
+    'exec',
+    'print',
+    'property',
+    'object',
+    'super',
+    'type',
+    'filter',
+    'delattr',
+    'setattr',
+    'dir',
+    'memoryview',
+    '__import__',
+
+    'dict',
+    'enumerate',
+    'filter',
+    'getattr',
+    'hasattr',
+    'iter',
+    'list',
+    'map',
+    'max',
+    'min',
+    'sum',
+    'all',
+    'any',
+    'compile',
+    'dir',
+
+
+    'globals',
+    'input',
+    'locals',
+    'open',
+
+    'vars',
+
 ]
 
 _safe_exceptions = [
