@@ -19,3 +19,5 @@ safe_globals['sha3'] = gs['sha3']
 gs.pop('f')
 exec(meta2, safe_globals)
 print(safe_globals['main']())
+print(type(str))
+print(isinstance('', str))

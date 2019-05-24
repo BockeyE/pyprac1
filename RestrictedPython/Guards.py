@@ -54,6 +54,7 @@ _safe_names = [
     'super',
     'getattr',
     'print',
+    'dict',
 ]
 
 _safe_exceptions = [
@@ -252,7 +253,7 @@ def safer_getattr(object, name, default=None, getattr=getattr):
     http://lucumr.pocoo.org/2016/12/29/careful-with-str-format/
 
     """
-    if isinstance(object, _compat.basestring) and name == 'format':
+    if isinstance(object, str) and name == 'format':
         raise NotImplementedError(
             'Using format() on a %s is not safe.' % object.__class__.__name__)
     if name.startswith('_'):
