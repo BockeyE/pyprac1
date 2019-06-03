@@ -202,3 +202,8 @@ if __name__ == '__main__':
     print(res)
     for k in res:
         print(k)
+
+
+def query_token_list(self):
+    ret = self.collection.find({}, {'_id': 0, 'public_key': 0, 'contract_type': 0})
+    return ret
