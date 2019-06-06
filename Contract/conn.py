@@ -188,6 +188,10 @@ sql3 = [
     {'$sort': {'_id': -1}},
     {'$limit': 1}
 ]
+s2 = [{'$match': {"app_hash": {"$regex": 's'}},
+
+       },
+      ]
 res = conn.run(conn.collection('blocks').aggregate(sql, allowDiskUse=True))
 # res = conn.run(conn.collection('b18435b902a1f06e37272e11e5f76abb81318306b7f6ca69402f2ed8185cc662').aggregate(sql3,
 #                                                                                                              allowDiskUse=True))
