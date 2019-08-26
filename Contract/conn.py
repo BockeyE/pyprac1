@@ -155,9 +155,12 @@ class LocalMongoDBConnection(Connection):
 
 def getOne():
     OPTS = {
-        'host': '192.168.3.181',
-        "port": 27020,
-        "dbname": 'turingchain',
+        'host': '127.0.0.1',
+        # 'host': '192.168.3.182',
+        # "port": 27020,
+        "port": 27017,
+        "dbname": 'cmbzkp',
+        # "dbname": 'turingchain',
         "connection_timeout": 5000,
         "max_tries": 3
     }
@@ -192,14 +195,49 @@ s2 = [{'$match': {"app_hash": {"$regex": 's'}},
 
        },
       ]
-res = conn.run(conn.collection('blocks').aggregate(sql, allowDiskUse=True))
+ssa = [{'$match': {
+    '$and': [
+        {'$or': [
+            {'trans_details.metadata.call': {"$regex": "HQ8sGu8zaKACzD9ekdoTJeHndHcHDNGeZkfU7L2THvos"}},
+            {'trans_details.inputs.owners_before': 'HQ8sGu8zaKACzD9ekdoTJeHndHcHDNGeZkfU7L2THvos'}
+        ]
+        },
+        {'trans_details.asset.data.id':
+             '930c96065628fcd781a08ff7d0e65c4e79e0c6a8e471ade1e8c135124ee46931'},
+        {'contract_result.result': 'True'}, {'trans_details.metadata.timestamp': {'$gt': 0}},
+        {'trans_details.metadata.timestamp': {'$lt': 1559814063550}}]}},
+    {'$unwind': '$trans_details'},
+    {'$sort': {'trans_details.metadata.timestamp': -1}}]
+
+codes = [
+    {'$match': {'$or': [
+        {
+            'trans_details.asset.data.id': 'f5a95022e1cd6c9a1adf3c37dbfaa55c3a5d172578f2fc69dabb7483865e8efb'},
+        {'trans_details.id': 'f5a95022e1cd6c9a1adf3c37dbfaa55c3a5d172578f2fc69dabb7483865e8efb'}
+    ]}},
+    {'$unwind': '$trans_details'},
+    {'$match': {'$and': [{'$or': [{
+        'trans_details.asset.data.id': 'f5a95022e1cd6c9a1adf3c37dbfaa55c3a5d172578f2fc69dabb7483865e8efb'},
+        {'trans_details.id': 'f5a95022e1cd6c9a1adf3c37dbfaa55c3a5d172578f2fc69dabb7483865e8efb'}]},
+        {'trans_details.operation': {'$in': ['CONTRACT_DEPLOY', 'CONTRACT_UPDATE']}}]}},
+    {'$sort': {'height': -1}},
+    {'$limit': 1}
+]
+
+
+
+res = conn.run(conn.collection('local_data').find({'height': {"$lt": 8, "$gt": (5)}}))
+# res = conn.run(conn.collection('blocks').aggregate(codes, allowDiskUse=True))
 # res = conn.run(conn.collection('b18435b902a1f06e37272e11e5f76abb81318306b7f6ca69402f2ed8185cc662').aggregate(sql3,
 #                                                                                                              allowDiskUse=True))
 assets = list(res)
-print(assets)
-# print(assets[0]['trans_details']['metadata']['user_selling_usd_rate'])
-for k in res:
-    print(k)
 
+print(assets)
+
+# print(assets)
+# print(assets[0]['trans_details']['metadata']['user_selling_usd_rate'])
+# for k in res:
+#     print(k)
+# print(assets[0]['trans_details']['asset']['data']['code'])
 # ttime = assets[0]['block_header']['time']
 # print(ttime)
