@@ -1,12 +1,14 @@
-import pymongo.errors
 import pymongo
 from ssl import CERT_REQUIRED
-from RestrictedPython.Guards import safe_globals
+from Guards import safe_globals
 import math
 import re
 import sha3
+
 gs = globals()
-print(gs)
+lc = locals()
+print('gs :', gs)
+print('lc ', lc)
 with open('fullc.py', 'r', encoding='UTF-8') as f:
     meta2 = f.read()
 
@@ -18,6 +20,4 @@ safe_globals['re'] = gs['re']
 safe_globals['sha3'] = gs['sha3']
 gs.pop('f')
 exec(meta2, safe_globals)
-print(safe_globals['main']())
-print(type(str))
-print(isinstance('', str))
+print('safe main', safe_globals['main']())
