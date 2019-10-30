@@ -3,6 +3,13 @@ import re
 
 from click._compat import raw_input
 
+def CalcFileSha256():
+    file_path = 'C:\ZZBK\sqs.pdf'
+    with open(file_path, "rb") as f:
+        sha256obj = hashlib.sha256()
+        sha256obj.update(f.read())
+        hash_value = sha256obj.hexdigest()
+        return hash_value
 
 def act(fname, mark, rep, outf):
     # 打开文件，readlines是py读文本成str数组的方法
