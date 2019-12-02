@@ -1,7 +1,7 @@
 import os
 import time
 
-basedir = '/root/script'
+basedir = 'c://ZZBK/persontest'
 filelists = []
 # 指定想要统计的文件类型
 whitelist = ['java', 'py']
