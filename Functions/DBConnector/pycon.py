@@ -1,7 +1,7 @@
 import pymysql
 
 # 创建一个连接对象，再使用创建游标
-con = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='123456', db='mysql')
+con = pymysql.connect(host='127.0.0.1', port=3306, user='aaa', passwd='123456', db='infoweb')
 cursor = con.cursor()
 
 # 执行一个SQL语句
